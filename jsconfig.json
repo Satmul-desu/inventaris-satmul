@@ -1,0 +1,1 @@
+{"compilerOptions":{"baseUrl":".","paths":{"@/*":["resources/js/argon/*"],"assets/*":["resources/js/argon/assets/*"],"components/*":["resources/js/argon/components/*"],"context/*":["resources/js/argon/context/*"],"examples/*":["resources/js/argon/examples/*"],"layouts/*":["resources/js/argon/layouts/*"]}}}

@@ -1,0 +1,88 @@
+@extends('layouts.admin')
+
+@section('title', 'Barang Masuk')
+
+@section('content')
+<div class="card">
+    <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">Data Barang Masuk</h4>
+            <a href="{{ route('admin.stock-in.create') }}" class="btn btn-success">
+                <i class="fa fa-plus"></i> Tambah Barang Masuk
+            </a>
+        </div>
+    </div>
+    <div class="card-body">
+        <form method="GET" class="row mb-4">
+            <div class="col-md-3">
+                <input type="date" name="date_from" class="form-control" value="{{ request('date_from') }}" placeholder="Dari Tanggal">
+            </div>
+            <div class="col-md-3">
+                <input type="date" name="date_to" class="form-control" value="{{ request('date_to') }}" placeholder="Sampai Tanggal">
+            </div>
+            <div class="col-md-3">
+                <select name="item_id" class="form-control">
+                    <option value="">Semua Barang</option>
+                    @foreach($items as $item)
+                    <option value="{{ $item->id }}" {{ request('item_id') == $item->id ? 'selected' : '' }}>
+                        {{ $item->name }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary btn-block">Filter</button>
+            </div>
+        </form>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th width="50">No</th>
+                        <th>Tanggal</th>
+                        <th>Barang</th>
+                        <th>Supplier</th>
+                        <th>Jumlah</th>
+                        <th>User</th>
+                        <th width="100">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($stockIns as $index => $stockIn)
+                    <tr>
+                        <td>{{ $stockIns->firstItem() + $index }}</td>
+                        <td>{{ $stockIn->date->format('d/m/Y') }}</td>
+                        <td>{{ $stockIn->item->name }}</td>
+                        <td>{{ $stockIn->supplier->name ?? '-' }}</td>
+                        <td class="text-success font-weight-bold">+{{ $stockIn->qty }}</td>
+                        <td>{{ $stockIn->user->name }}</td>
+                        <td>
+                            <a href="{{ route('admin.stock-in.show', $stockIn->id) }}" class="btn btn-sm btn-info" title="Detail">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                            <form action="{{ route('admin.stock-in.destroy', $stockIn->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin hapus? Stok akan dikembalikan.')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger" title="Hapus">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="7" class="text-center">Tidak ada data barang masuk</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-3">
+            {{ $stockIns->appends(request()->query())->links() }}
+        </div>
+    </div>
+</div>
+@endsection
+

@@ -62,15 +62,5 @@
                 {{ __('Masuk') }}
             </x-primary-button>
         </div>
-
-        <!-- Register Link -->
-        <div class="mt-6 text-center">
-            <p class="text-sm text-gray-600">
-                {{ __('Belum punya akun?') }}
-                <a href="{{ route('register') }}" class="text-purple-600 hover:text-purple-800 font-semibold transition-colors">
-                    {{ __('Daftar sekarang') }}
-                </a>
-            </p>
-        </div>
     </form>
 </x-guest-layout>

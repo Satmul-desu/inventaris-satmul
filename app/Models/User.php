@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -21,6 +20,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role_id',
+        'is_active',
+        'phone',
+        'address',
     ];
 
     /**
@@ -43,6 +46,72 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_active' => 'boolean',
         ];
     }
+
+    /**
+     * Get the role that owns the user.
+     */
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    /**
+     * Check if user is owner/admin.
+     */
+    public function isOwner(): bool
+    {
+        return $this->role && $this->role->name === 'owner';
+    }
+
+    /**
+     * Check if user is staff.
+     */
+    public function isStaff(): bool
+    {
+        return $this->role && $this->role->name === 'staff';
+    }
+
+    /**
+     * Check if user is active.
+     */
+    public function isActive(): bool
+    {
+        return $this->is_active;
+    }
+
+    /**
+     * Get activity logs for this user.
+     */
+    public function activityLogs()
+    {
+        return $this->hasMany(ActivityLog::class);
+    }
+
+    /**
+     * Get stock ins created by this user.
+     */
+    public function stockIns()
+    {
+        return $this->hasMany(StockIn::class);
+    }
+
+    /**
+     * Get stock outs created by this user.
+     */
+    public function stockOuts()
+    {
+        return $this->hasMany(StockOut::class);
+    }
+
+    /**
+     * Get stock logs created by this user.
+     */
+    public function stockLogs()
+    {
+        return $this->hasMany(StockLog::class);
+    }
 }
+

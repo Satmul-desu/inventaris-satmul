@@ -16,7 +16,7 @@
       <li class="sidebar-header">DATA MASTER</li>
       <li>
         <a href="{{ route('admin.items.index') }}" class="{{ request()->routeIs('admin.items.*') ? 'active' : '' }}">
-          <i class="zmdi zmdi-box"></i> <span>Barang</span>
+          <i class="bi bi-box2-fill"></i> <span>Barang</span>
         </a>
       </li>
       <li>

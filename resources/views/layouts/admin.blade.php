@@ -20,6 +20,8 @@
   <link href="{{ asset('assets/css/animate.css') }}" rel="stylesheet" type="text/css"/>
   <!-- Icons CSS-->
   <link href="{{ asset('assets/css/icons.css') }}" rel="stylesheet" type="text/css"/>
+  <!-- Bootstrap Icons CSS-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <!-- Sidebar CSS-->
   <link href="{{ asset('assets/css/sidebar-menu.css') }}" rel="stylesheet"/>
   <!-- Custom Style-->

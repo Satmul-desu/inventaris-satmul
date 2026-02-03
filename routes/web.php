@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\BorrowingController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ItemController as AdminItemController;
 use App\Http\Controllers\Admin\LocationController;
@@ -48,6 +49,8 @@ Route::middleware(['auth', 'is_active'])->group(function () {
         Route::resource('suppliers', SupplierController::class);
         Route::resource('stock-in', StockInController::class);
         Route::resource('stock-out', StockOutController::class);
+        Route::resource('borrowings', BorrowingController::class);
+        Route::post('borrowings/{borrowing}/return', [BorrowingController::class, 'returnItem'])->name('borrowings.return');
         Route::resource('users', UserController::class);
         
         // Notifications

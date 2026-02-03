@@ -171,12 +171,77 @@
       @yield('content')
     </div>
     
-    <footer class="footer">
-        <div class="container">
-        <div class="text-center">
-            Copyright &copy; {{ date('Y') }} Inventaris Satmul
+    <!-- Footer Vertikal -->
+    <footer class="bg-slate-900 text-gray-300 mt-10">
+      <div class="container-fluid px-4 py-4">
+        
+        <!-- Baris 1: Logo & Sistem (Full Width) -->
+        <div class="row mb-4">
+          <div class="col-12">
+            <div class="d-flex align-items-center gap-3">
+              <img src="{{ asset('assets/images/logo-icon.png') }}" alt="Logo Sekolah" class="rounded-circle" style="width: 48px; height: 48px;">
+              <div>
+                <h4 class="text-white font-weight-bold">Inventaris Admin</h4>
+                <p class="text-muted small mb-0">Sistem Sekolah</p>
+              </div>
+            </div>
+            <p class="mt-3 mb-0" style="max-width: 600px;">
+              Platform digital untuk pengelolaan inventaris barang secara aman,
+              modern, dan terintegrasi.
+            </p>
+          </div>
         </div>
+        
+        
+        
+        <!-- Baris 2: 4 Kolom (Navigasi, Info Sekolah, Support) -->
+        <div class="row">
+          
+          <!-- Navigasi Cepat -->
+          <div class="col-md-4 mb-3 mb-md-0">
+            <h5 class="text-white font-weight-bold mb-3">Navigasi Cepat</h5>
+            <ul class="list-unstyled mb-0">
+              <li class="mb-2"><a href="#" class="text-gray-400 hover:text-white text-decoration-none">Dashboard</a></li>
+              <li class="mb-2"><a href="#" class="text-gray-400 hover:text-white text-decoration-none">Data Barang</a></li>
+              <li class="mb-2"><a href="#" class="text-gray-400 hover:text-white text-decoration-none">Laporan</a></li>
+              <li class="mb-0"><a href="#" class="text-gray-400 hover:text-white text-decoration-none">Pengajuan</a></li>
+            </ul>
+          </div>
+          
+          <!-- Informasi Sekolah -->
+          <div class="col-md-4 mb-3 mb-md-0">
+            <h5 class="text-white font-weight-bold mb-3">Informasi Sekolah</h5>
+            <ul class="list-unstyled mb-0">
+              <li class="mb-2">SMK Contoh Nusantara</li>
+              <li class="mb-2">Jl. Pendidikan No. 123</li>
+              <li class="mb-2">Email: admin@sekolah.sch.id</li>
+              <li class="mb-0">Telp: 021-123456</li>
+            </ul>
+          </div>
+          
+          <!-- Support Sistem -->
+          <div class="col-md-4 mb-3 mb-md-0">
+            <h5 class="text-white font-weight-bold mb-3">Support Sistem</h5>
+            <ul class="list-unstyled mb-0">
+              <li class="mb-2"><a href="#" class="text-gray-400 hover:text-white text-decoration-none">Panduan</a></li>
+              <li class="mb-2"><a href="#" class="text-gray-400 hover:text-white text-decoration-none">FAQ</a></li>
+              <li class="mb-2"><a href="#" class="text-gray-400 hover:text-white text-decoration-none">Kontak Admin</a></li>
+              <li class="mb-0">Versi 2.1.0</li>
+            </ul>
+          </div>
+          
         </div>
+        
+       
+       <hr class="border-secondary"> 
+        <!-- Baris 3: Copyright -->
+        <div class="row">
+          <div class="col-12 text-center">
+            <p class="text-white font-weight-bold mb-3">© {{ date('Y') }} Sistem Inventaris Barang Sekolah — All Rights Reserved</p>
+          </div>
+        </div>
+        
+      </div>
     </footer>
     
     <a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i></a>

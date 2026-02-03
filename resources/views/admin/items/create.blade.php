@@ -15,7 +15,15 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="code">Kode Barang <span class="text-danger">*</span></label>
-                        <input type="text" name="code" id="code" class="form-control" value="{{ old('code') }}" required placeholder="BRG-001">
+                        <div class="input-group">
+                            <input type="text" name="code" id="code" class="form-control" value="{{ old('code', $suggestedCode ?? '') }}" placeholder="BRG-001">
+                            <div class="input-group-append">
+                                <span class="input-group-text bg-info text-white" title="Kode barang akan di-generate otomatis">
+                                    <i class="fa fa-magic"></i> Auto
+                                </span>
+                            </div>
+                        </div>
+                        <small class="text-muted">Kode akan di-generate otomatis. Anda dapat mengubahnya jika diperlukan.</small>
                         @error('code')
                         <small class="text-danger">{{ $message }}</small>
                         @enderror
@@ -82,6 +90,18 @@
                         <label for="min_stock">Minimal Stok <span class="text-danger">*</span></label>
                         <input type="number" name="min_stock" id="min_stock" class="form-control" value="{{ old('min_stock', 0) }}" required min="0">
                         @error('min_stock')
+                        <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="price">Harga Satuan (Rp)</label>
+                        <input type="number" name="price" id="price" class="form-control" value="{{ old('price', 0) }}" min="0" step="0.01">
+                        @error('price')
                         <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>

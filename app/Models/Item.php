@@ -17,7 +17,7 @@ class Item extends Model
 
     protected $fillable = [
         'code', 'name', 'category_id', 'unit_id', 
-        'stock', 'min_stock', 'description'
+        'stock', 'min_stock', 'price', 'description'
     ];
 
     /**
@@ -77,6 +77,45 @@ class Item extends Model
     }
 
     /**
+     * Generate unique item code automatically.
+     *
+     * @param int|null $categoryId Category ID to generate code for
+     * @return string Generated item code (e.g., "ELE-001")
+     */
+    public static function generateCode(?int $categoryId = null): string
+    {
+        // Get category prefix (first 3 letters uppercase)
+        $prefix = 'BRG';
+        if ($categoryId) {
+            $category = Category::find($categoryId);
+            if ($category) {
+                $prefix = strtoupper(substr($category->name, 0, 3));
+            }
+        }
+
+        // Get existing codes with this prefix
+        $query = static::where('code', 'like', $prefix . '%');
+        
+        if ($categoryId) {
+            $query->where('category_id', $categoryId);
+        }
+
+        $lastCode = $query->orderBy('code', 'desc')->value('code');
+        
+        // Extract number from last code
+        $number = 1;
+        if ($lastCode) {
+            $parts = explode('-', $lastCode);
+            if (count($parts) === 2) {
+                $number = intval(end($parts)) + 1;
+            }
+        }
+
+        // Format: PREFIX-001
+        return $prefix . '-' . str_pad($number, 3, '0', STR_PAD_LEFT);
+    }
+
+    /**
      * Check if stock is low.
      */
     public function isLowStock(): bool
@@ -103,6 +142,16 @@ class Item extends Model
             return '<span class="badge badge-warning">Menipis</span>';
         }
         return '<span class="badge badge-success">Tersedia</span>';
+    }
+
+    /**
+     * Get formatted price in Indonesian Rupiah format.
+     *
+     * @return string Formatted price (e.g., "Rp 35.000")
+     */
+    public function getFormattedPriceAttribute(): string
+    {
+        return 'Rp ' . number_format($this->price, 0, ',', '.');
     }
 }
 

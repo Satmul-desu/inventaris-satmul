@@ -89,6 +89,18 @@
                 </div>
             </div>
 
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="price">Harga Satuan (Rp)</label>
+                        <input type="number" name="price" id="price" class="form-control" value="{{ old('price', $item->price) }}" min="0" step="0.01">
+                        @error('price')
+                        <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+                </div>
+            </div>
+
             <div class="form-group">
                 <label for="description">Deskripsi</label>
                 <textarea name="description" id="description" class="form-control" rows="3">{{ old('description', $item->description) }}</textarea>

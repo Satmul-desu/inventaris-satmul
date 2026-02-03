@@ -48,6 +48,10 @@
                         <td><strong>Min. Stok</strong></td>
                         <td>{{ $item->min_stock }} {{ $item->unit->name }}</td>
                     </tr>
+                    <tr>
+                        <td><strong>Harga Satuan</strong></td>
+                        <td>{{ $item->formatted_price }}</td>
+                    </tr>
                     @if($item->description)
                     <tr>
                         <td><strong>Deskripsi</strong></td>

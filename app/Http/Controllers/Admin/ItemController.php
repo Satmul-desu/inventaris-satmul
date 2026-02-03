@@ -59,7 +59,11 @@ class ItemController extends Controller
     {
         $categories = Category::orderBy('name')->get();
         $units = Unit::orderBy('name')->get();
-        return view('admin.items.create', compact('categories', 'units'));
+        
+        // Generate suggested item code
+        $suggestedCode = Item::generateCode();
+        
+        return view('admin.items.create', compact('categories', 'units', 'suggestedCode'));
     }
 
     /**
@@ -68,23 +72,28 @@ class ItemController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'code' => 'required|string|max:50|unique:items',
+            'code' => 'nullable|string|max:50|unique:items',
             'name' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
             'unit_id' => 'required|exists:units,id',
             'stock' => 'required|integer|min:0',
             'min_stock' => 'required|integer|min:0',
+            'price' => 'nullable|numeric|min:0',
             'description' => 'nullable|string',
         ]);
 
-        DB::transaction(function () use ($request) {
+        // Generate code if not provided
+        $code = $request->code ?? Item::generateCode($request->category_id);
+
+        DB::transaction(function () use ($request, $code) {
             $item = Item::create([
-                'code' => $request->code,
+                'code' => $code,
                 'name' => $request->name,
                 'category_id' => $request->category_id,
                 'unit_id' => $request->unit_id,
                 'stock' => $request->stock,
                 'min_stock' => $request->min_stock,
+                'price' => $request->price ?? 0,
                 'description' => $request->description,
             ]);
 
@@ -131,6 +140,7 @@ class ItemController extends Controller
             'unit_id' => 'required|exists:units,id',
             'stock' => 'required|integer|min:0',
             'min_stock' => 'required|integer|min:0',
+            'price' => 'nullable|numeric|min:0',
             'description' => 'nullable|string',
         ]);
 
@@ -143,6 +153,7 @@ class ItemController extends Controller
             'unit_id' => $request->unit_id,
             'stock' => $request->stock,
             'min_stock' => $request->min_stock,
+            'price' => $request->price ?? 0,
             'description' => $request->description,
         ]);
 

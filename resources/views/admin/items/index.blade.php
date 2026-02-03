@@ -51,6 +51,7 @@
                         <th>Satuan</th>
                         <th>Stok</th>
                         <th>Min. Stok</th>
+                        <th>Harga</th>
                         <th>Status</th>
                         <th width="120">Aksi</th>
                     </tr>
@@ -65,6 +66,7 @@
                         <td>{{ $item->unit->name }}</td>
                         <td>{{ $item->stock }}</td>
                         <td>{{ $item->min_stock }}</td>
+                        <td>{{ $item->formatted_price }}</td>
                         <td>{!! $item->getStatusBadgeAttribute() !!}</td>
                         <td>
                             <a href="{{ route('admin.items.show', $item->id) }}" class="btn btn-sm btn-info" title="Detail">

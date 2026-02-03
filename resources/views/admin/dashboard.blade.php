@@ -109,6 +109,53 @@
     </div>
 </div>
 
+{{-- Ringkasan Peminjaman --}}
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <i class="fa fa-book"></i> Ringkasan Peminjaman
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6 col-lg-3">
+                        <div class="card bg-primary text-white text-center">
+                            <div class="card-body">
+                                <h3 class="mb-0">{{ $totalBorrowings }}</h3>
+                                <p class="mb-0 small">Total Peminjaman</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="card bg-warning text-white text-center">
+                            <div class="card-body">
+                                <h3 class="mb-0">{{ $activeBorrowings }}</h3>
+                                <p class="mb-0 small">Sedang Dipinjam</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="card bg-danger text-white text-center">
+                            <div class="card-body">
+                                <h3 class="mb-0">{{ $overdueBorrowings }}</h3>
+                                <p class="mb-0 small">Terlambat</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="card bg-success text-white text-center">
+                            <div class="card-body">
+                                <h3 class="mb-0">{{ $returnedBorrowings }}</h3>
+                                <p class="mb-0 small">Dikembalikan</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row mt-4">
     <div class="col-12 col-lg-4">
         <div class="card">
@@ -285,6 +332,49 @@
                         @empty
                         <tr>
                             <td colspan="4" class="text-center">Tidak ada data</td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <i class="fa fa-book"></i> Peminjaman Terakhir
+                <div class="card-action">
+                    <a href="{{ route('admin.borrowings.index') }}" class="btn btn-sm btn-light">Lihat Semua</a>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table align-items-center table-flush table-borderless">
+                    <thead>
+                        <tr>
+                            <th>Tanggal</th>
+                            <th>Peminjam</th>
+                            <th>Barang</th>
+                            <th>Jumlah</th>
+                            <th>Batas Kembali</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($recentBorrowings as $borrowing)
+                        <tr class="{{ $borrowing->isOverdue() ? 'table-danger' : '' }}">
+                            <td>{{ $borrowing->borrow_date->format('d/m/Y') }}</td>
+                            <td>{{ $borrowing->borrower_name }}</td>
+                            <td>{{ $borrowing->item->name }}</td>
+                            <td>{{ $borrowing->qty }}</td>
+                            <td>{{ $borrowing->return_date->format('d/m/Y') }}</td>
+                            <td>{!! $borrowing->getStatusBadgeAttribute() !!}</td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="6" class="text-center">Tidak ada data peminjaman</td>
                         </tr>
                         @endforelse
                     </tbody>

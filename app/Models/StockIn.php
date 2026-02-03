@@ -11,6 +11,10 @@ class StockIn extends Model
 
     protected $fillable = ['item_id', 'supplier_id', 'qty', 'date', 'note', 'user_id'];
 
+    protected $casts = [
+        'date' => 'datetime',
+    ];
+
     /**
      * Get the item that owns the stock in.
      */

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Pagination\Paginator;
 use App\Models\Item;
 use App\Models\Category;
 use App\Models\Unit;
@@ -29,6 +30,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Set default pagination view to Bootstrap 5 style
+        Paginator::defaultView('vendor.pagination.bootstrap-5');
+        
         // Register observers for all models
         Item::observe(ItemObserver::class);
         Category::observe(CategoryObserver::class);

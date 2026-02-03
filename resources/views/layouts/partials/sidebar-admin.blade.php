@@ -51,6 +51,11 @@
           <i class="zmdi zmdi-minus-circle"></i> <span>Barang Keluar</span>
         </a>
       </li>
+      <li>
+        <a href="{{ route('admin.borrowings.index') }}" class="{{ request()->routeIs('admin.borrowings.*') ? 'active' : '' }}">
+          <i class="zmdi zmdi-book"></i> <span>Peminjaman</span>
+        </a>
+      </li>
       
       <li class="sidebar-header">PENGELOLAAN</li>
       <li>
@@ -67,9 +72,6 @@
           @endif
         </a>
       </li>
-      
-      <li class="sidebar-header">SISTEM</li>
-      <li><a href="#"><i class="zmdi zmdi-info text-info"></i> <span>Tentang</span></a></li>
     </ul>
 </div>
 

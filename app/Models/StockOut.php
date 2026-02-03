@@ -11,6 +11,10 @@ class StockOut extends Model
 
     protected $fillable = ['item_id', 'location_id', 'qty', 'date', 'recipient', 'note', 'user_id'];
 
+    protected $casts = [
+        'date' => 'datetime',
+    ];
+
     /**
      * Get the item that owns the stock out.
      */

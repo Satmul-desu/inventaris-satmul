@@ -11,6 +11,7 @@ use App\Models\Unit;
 use App\Models\Location;
 use App\Models\StockIn;
 use App\Models\StockOut;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
@@ -114,12 +115,27 @@ class DashboardController extends Controller
     /**
      * Display user dashboard.
      */
-    public function user()
+    public function user(Request $request)
     {
         try {
-            $items = Item::with(['category', 'unit'])
-                ->orderBy('name')
-                ->get();
+            $itemsQuery = Item::with(['category', 'unit'])
+                ->orderBy('name');
+
+            if ($request->has('search') && $request->search) {
+                $search = $request->search;
+                $itemsQuery->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                      ->orWhere('code', 'like', "%{$search}%");
+                });
+            }
+
+            $items = $itemsQuery->paginate(10);
+
+            $totalItems = Item::count();
+            $availableItems = Item::where('stock', '>', 0)->count();
+            $lowStockCount = Item::where('stock', '>', 0)
+                ->whereColumn('stock', '<=', 'min_stock')
+                ->count();
 
             $notifications = Notification::with('item')
                 ->where('is_read', false)
@@ -127,18 +143,16 @@ class DashboardController extends Controller
                 ->take(5)
                 ->get();
 
-            $lowStockCount = Item::where('stock', '>', 0)
-                ->whereColumn('stock', '<=', 'min_stock')
-                ->count();
-
         } catch (\Exception $e) {
             dd($e);
         }
 
         return view('user.dashboard', compact(
             'items',
-            'notifications',
-            'lowStockCount'
+            'totalItems',
+            'availableItems',
+            'lowStockCount',
+            'notifications'
         ));
     }
 

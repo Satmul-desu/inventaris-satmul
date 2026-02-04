@@ -8,7 +8,7 @@
         <div class="row row-group m-0">
             <div class="col-12 col-lg-4 border-light">
                 <div class="card-body">
-                  <h5 class="text-white mb-0">{{ $items->count() }} <span class="float-right"><i class="fa fa-box"></i></span></h5>
+                  <h5 class="text-white mb-0">{{ $totalItems }} <span class="float-right"><i class="fa fa-box"></i></span></h5>
                     <div class="progress my-3" style="height:3px;">
                        <div class="progress-bar" style="width:100%"></div>
                     </div>
@@ -17,7 +17,7 @@
             </div>
             <div class="col-12 col-lg-4 border-light">
                 <div class="card-body">
-                  <h5 class="text-white mb-0">{{ $items->where('stock', '>', 0)->count() }} <span class="float-right"><i class="fa fa-check-circle text-success"></i></span></h5>
+                  <h5 class="text-white mb-0">{{ $availableItems }} <span class="float-right"><i class="fa fa-check-circle text-success"></i></span></h5>
                     <div class="progress my-3" style="height:3px;">
                        <div class="progress-bar bg-success" style="width:100%"></div>
                     </div>

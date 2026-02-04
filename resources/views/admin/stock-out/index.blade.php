@@ -7,9 +7,11 @@
     <div class="card-header">
         <div class="d-flex justify-content-between align-items-center">
             <h4 class="mb-0">Data Barang Keluar</h4>
+            @if(auth()->user()->isOwner())
             <a href="{{ route('admin.stock-out.create') }}" class="btn btn-danger">
                 <i class="fa fa-minus"></i> Tambah Barang Keluar
             </a>
+            @endif
         </div>
     </div>
     <div class="card-body">
@@ -46,7 +48,7 @@
                         <th>Jumlah</th>
                         <th>Penerima</th>
                         <th>User</th>
-                        <th width="100">Aksi</th>
+                        <th width="{{ auth()->user()->isOwner() ? '100' : '60' }}">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -63,6 +65,7 @@
                             <a href="{{ route('admin.stock-out.show', $stockOut->id) }}" class="btn btn-sm btn-info" title="Detail">
                                 <i class="fa fa-eye"></i>
                             </a>
+                            @if(auth()->user()->isOwner())
                             <form action="{{ route('admin.stock-out.destroy', $stockOut->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin hapus? Stok akan dikembalikan.')">
                                 @csrf
                                 @method('DELETE')
@@ -70,6 +73,7 @@
                                     <i class="fa fa-trash"></i>
                                 </button>
                             </form>
+                            @endif
                         </td>
                     </tr>
                     @empty

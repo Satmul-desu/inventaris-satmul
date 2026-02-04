@@ -8,6 +8,14 @@ use Illuminate\Http\Request;
 class UnitController extends Controller
 {
     /**
+     * Create a new controller instance.
+     */
+    public function __construct()
+    {
+        $this->middleware('role:owner')->only(['create', 'store', 'edit', 'update', 'destroy']);
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index()

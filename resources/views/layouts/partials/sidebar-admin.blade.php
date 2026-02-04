@@ -2,7 +2,7 @@
     <div class="brand-logo">
       <a href="{{ route('admin.dashboard') }}">
        <img src="{{ asset('assets/images/logo-icon.png') }}" class="logo-icon" alt="logo icon">
-       <h5 class="logo-text">Inventaris Admin</h5>
+       <h5 class="logo-text">{{ auth()->user()->isOwner() ? 'Inventaris Admin' : 'Inventaris Staff' }}</h5>
      </a>
    </div>
    <ul class="sidebar-menu do-nicescrol">
@@ -58,18 +58,16 @@
       </li>
       
       <li class="sidebar-header">PENGELOLAAN</li>
+      @if(auth()->user()->isOwner())
       <li>
         <a href="{{ route('admin.users.index') }}" class="{{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
           <i class="zmdi zmdi-accounts"></i> <span>Manajemen User</span>
         </a>
       </li>
+      @endif
       <li>
-        <a href="{{ route('admin.notifications.index') }}" class="{{ request()->routeIs('admin.notifications.*') ? 'active' : '' }}">
-          <i class="zmdi zmdi-notifications"></i> <span>Notifikasi</span>
-          @php $unread = \App\Models\Notification::where('is_read', false)->count(); @endphp
-          @if($unread > 0)
-          <span class="badge badge-danger float-right">{{ $unread }}</span>
-          @endif
+        <a href="{{ route('admin.sandbox.index') }}" class="{{ request()->routeIs('admin.sandbox.*') ? 'active' : '' }}">
+          <i class="fa fa-comments"></i> <span>Sandbox (Q&A)</span>
         </a>
       </li>
     </ul>

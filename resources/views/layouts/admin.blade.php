@@ -4,9 +4,9 @@
   <meta charset="utf-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-  <meta name="description" content="Inventaris Barang Satmul - Admin"/>
+  <meta name="description" content="Inventaris Barang Satmul - {{ auth()->user()->isOwner() ? 'Admin' : 'Staff' }}"/>
   <meta name="author" content="Satmul"/>
-  <title>@yield('title', 'Dashboard') - Inventaris Admin</title>
+  <title>@yield('title', 'Dashboard') - {{ auth()->user()->isOwner() ? 'Inventaris Admin' : 'Inventaris Staff' }}</title>
   
   <!--favicon-->
   <link rel="icon" href="{{ asset('assets/images/favicon.ico') }}" type="image/x-icon">
@@ -62,78 +62,73 @@
       @endphp
       
       <ul class="navbar-nav align-items-center right-nav-link">
-        <li class="nav-item dropdown-lg">
-          <a class="nav-link dropdown-toggle dropdown-toggle-nocaret waves-effect" data-toggle="dropdown" href="javascript:void();">
-          <i class="fa fa-envelope-open-o"></i></a>
+        <!-- Sandbox Icon - Q&A System -->
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('admin.sandbox.index') }}" title="Sandbox - Tanya Jawab">
+          <i class="bi bi-chat-dots-fill"></i></a>
         </li>
-        <li class="nav-item dropdown-lg">
-          <a class="nav-link dropdown-toggle dropdown-toggle-nocaret waves-effect" data-toggle="dropdown" href="javascript:void();">
-          <i class="fa fa-bell-o"></i>
+        <!-- Notification Icon - Link ke halaman notifikasi -->
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('admin.notifications.index') }}" title="Notifikasi">
+          <i class="bi bi-bell-fill"></i>
           @if($unreadNotifications > 0)
           <span class="badge badge-danger badge-pill">{{ $unreadNotifications }}</span>
           @endif
           </a>
-          <div class="dropdown-menu dropdown-menu-right">
-            <div class="p-3">
-                <span class="font-weight-bold">Notifikasi</span>
-                @if($unreadNotifications > 0)
-                <a href="{{ route('admin.notifications.mark-all-read') }}" class="text-primary small">Tandai semua dibaca</a>
-                @endif
-            </div>
-            <div class="dropdown-divider"></div>
-            @php
-              $recentNotifications = collect();
-              try {
-                if (auth()->check()) {
-                  $recentNotifications = \App\Models\Notification::with('item')
-                    ->where('is_read', false)
-                    ->latest()
-                    ->take(5)
-                    ->get();
-                }
-              } catch (\Exception $e) {
-                // Table might not exist yet
-              }
-            @endphp
-            @forelse($recentNotifications as $notif)
-            <a href="{{ route('admin.notifications.index') }}" class="dropdown-item">
-                <div class="media">
-                    <div class="avatar"><i class="fa fa-exclamation-triangle text-warning"></i></div>
-                    <div class="media-body">
-                        <h6 class="mt-0 user-title">{{ $notif->item->name ?? 'Barang' }}</h6>
-                        <p class="mb-0 small-font">{{ \Illuminate\Support\Str::limit($notif->message, 50) }}</p>
-                        <small class="text-muted">{{ $notif->created_at->diffForHumans() }}</small>
-                    </div>
-                </div>
-            </a>
-            @empty
-            <div class="p-3 text-center text-muted">Tidak ada notifikasi</div>
-            @endforelse
-            <div class="dropdown-divider"></div>
-            <a href="{{ route('admin.notifications.index') }}" class="dropdown-item text-center">Lihat Semua</a>
-          </div>
         </li>
         <li class="nav-item">
           <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" data-toggle="dropdown" href="#">
-            <span class="user-profile"><img src="https://via.placeholder.com/110x110" class="img-circle" alt="user avatar"></span>
+            @php
+                $currentUser = Auth::user();
+                $hasPhoto = $currentUser && $currentUser->photo;
+                $photoUrl = $hasPhoto ? asset('storage/' . $currentUser->photo) : null;
+                // Get admin icon
+                $adminIcon = 'fa-user';
+                if ($currentUser && $currentUser->role) {
+                    if ($currentUser->role->name == 'owner') {
+                        $adminIcon = 'fa-user-shield';
+                    } elseif ($currentUser->role->name == 'admin') {
+                        $adminIcon = 'fa-user-cog';
+                    } elseif ($currentUser->role->name == 'staff') {
+                        $adminIcon = 'fa-user-edit';
+                    }
+                }
+            @endphp
+            <span class="user-profile">
+                @if($hasPhoto)
+                    <img src="{{ $photoUrl }}" class="img-circle" alt="user avatar" style="width: 38px; height: 38px; object-fit: cover;">
+                @else
+                    <div class="user-profile-no-photo img-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <i class="{{ $adminIcon }} text-white" style="font-size: 18px;"></i>
+                    </div>
+                @endif
+            </span>
           </a>
           <ul class="dropdown-menu dropdown-menu-right">
            <li class="dropdown-item user-details">
             <a href="javascript:void();">
                <div class="media">
-                 <div class="avatar"><img class="align-self-start mr-3" src="https://via.placeholder.com/110x110" alt="user avatar"></div>
+                 @if($hasPhoto)
+                 <div class="avatar"><img class="align-self-start mr-3" src="{{ $photoUrl }}" alt="user avatar" style="width: 64px; height: 64px; object-fit: cover;"></div>
+                 @else
+                 <div class="avatar" style="width: 64px; height: 64px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center;">
+                    <i class="{{ $adminIcon }} text-white" style="font-size: 32px;"></i>
+                 </div>
+                 @endif
                 <div class="media-body">
-                <h6 class="mt-2 user-title">{{ Auth::user()->name }}</h6>
-                <p class="user-subtitle">{{ Auth::user()->email }}</p>
-                <small class="text-muted">{{ Auth::user()->role->name ?? 'Owner' }}</small>
+                <h6 class="mt-2 user-title">{{ $currentUser->name }}</h6>
+                <p class="user-subtitle mb-1">{{ $currentUser->email }}</p>
+                <small class="text-muted">{{ $currentUser->role->name ?? 'Owner' }}</small>
                 </div>
                </div>
               </a>
             </li>
             <li class="dropdown-divider"></li>
-            <li class="dropdown-item"><i class="icon-user mr-2"></i> Profil</li>
+            <li class="dropdown-item"><i class="icon-user mr-2"></i> 
+                <a href="{{ route('profile.edit') }}" class="text-dark">Profil Saya</a>
+            </li>
             <li class="dropdown-divider"></li>
-            <li class="dropdown-item"><i class="icon-settings mr-2"></i> Pengaturan</li>
+            <li class="dropdown-item"><i class="icon-settings mr-2"></i> Pengaturan Akun</li>
             <li class="dropdown-divider"></li>
             <li class="dropdown-item">
                 <form method="POST" action="{{ route('logout') }}">
@@ -170,7 +165,7 @@
 
       @yield('content')
     </div>
-    
+    <hr class="border-secondary">
     <!-- Footer Vertikal -->
     <footer class="bg-slate-900 text-gray-300 mt-10">
       <div class="container-fluid px-4 py-4">
@@ -181,7 +176,7 @@
             <div class="d-flex align-items-center gap-3">
               <img src="{{ asset('assets/images/logo-icon.png') }}" alt="Logo Sekolah" class="rounded-circle" style="width: 48px; height: 48px;">
               <div>
-                <h4 class="text-white font-weight-bold">Inventaris Admin</h4>
+                <h4 class="text-white font-weight-bold">{{ auth()->user()->isOwner() ? 'Inventaris Admin' : 'Inventaris Staff' }}</h4>
                 <p class="text-muted small mb-0">Sistem Sekolah</p>
               </div>
             </div>
@@ -212,9 +207,9 @@
           <div class="col-md-4 mb-3 mb-md-0">
             <h5 class="text-white font-weight-bold mb-3">Informasi Sekolah</h5>
             <ul class="list-unstyled mb-0">
-              <li class="mb-2">SMK Contoh Nusantara</li>
-              <li class="mb-2">Jl. Pendidikan No. 123</li>
-              <li class="mb-2">Email: admin@sekolah.sch.id</li>
+              <li class="mb-2">SMK Assalaam Bandung</li>
+              <li class="mb-2">Jl.situ tarate</li>
+              <li class="mb-2">Email: admin@smkassalaambandung.sch.id</li>
               <li class="mb-0">Telp: 021-123456</li>
             </ul>
           </div>

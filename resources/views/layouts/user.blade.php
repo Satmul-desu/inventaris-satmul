@@ -152,9 +152,9 @@
           <div class="col-md-4 mb-3 mb-md-0">
             <h6 class="text-white font-weight-bold mb-3">Informasi Sekolah</h6>
             <ul class="list-unstyled mb-0">
-              <li class="mb-2">SMK Contoh Nusantara</li>
-              <li class="mb-2">Jl. Pendidikan No. 123</li>
-              <li class="mb-2">Email: admin@sekolah.sch.id</li>
+              <li class="mb-2">SMK Assalaam Bandung</li>
+              <li class="mb-2">Jl.situ tarate</li>
+              <li class="mb-2">Email: admin@smkassalaambandung.sch.id</li>
               <li class="mb-0">Telp: 021-123456</li>
             </ul>
           </div>

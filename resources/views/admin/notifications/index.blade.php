@@ -11,9 +11,11 @@
                 <a href="{{ route('admin.notifications.mark-all-read') }}" class="btn btn-sm btn-outline-primary">
                     <i class="fa fa-check"></i> Tandai Semua Dibaca
                 </a>
+                @if(auth()->user()->isOwner())
                 <a href="{{ route('admin.notifications.clear-all') }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Hapus semua notifikasi?')">
                     <i class="fa fa-trash"></i> Hapus Semua
                 </a>
+                @endif
             </div>
         </div>
     </div>
@@ -33,7 +35,7 @@
                         <th>Barang</th>
                         <th>Pesan</th>
                         <th>Waktu</th>
-                        <th width="100">Aksi</th>
+                        <th width="{{ auth()->user()->isOwner() ? '100' : '60' }}">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -55,6 +57,7 @@
                                 <i class="fa fa-check"></i>
                             </a>
                             @endif
+                            @if(auth()->user()->isOwner())
                             <form action="{{ route('admin.notifications.destroy', $notification->id) }}" method="POST" class="d-inline">
                                 @csrf
                                 @method('DELETE')
@@ -62,6 +65,7 @@
                                     <i class="fa fa-trash"></i>
                                 </button>
                             </form>
+                            @endif
                         </td>
                     </tr>
                     @empty

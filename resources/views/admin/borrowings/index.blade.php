@@ -7,9 +7,11 @@
     <div class="card-header">
         <div class="d-flex justify-content-between align-items-center">
             <h4 class="mb-0">Data Peminjaman</h4>
+            @if(auth()->user()->isOwner())
             <a href="{{ route('admin.borrowings.create') }}" class="btn btn-primary">
                 <i class="fa fa-plus"></i> Tambah Peminjaman
             </a>
+            @endif
         </div>
     </div>
     <div class="card-body">
@@ -52,7 +54,7 @@
                         <th>Jumlah</th>
                         <th>Tanggal Kembali</th>
                         <th>Status</th>
-                        <th width="120">Aksi</th>
+                        <th width="{{ auth()->user()->isOwner() ? '120' : '100' }}">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -82,6 +84,7 @@
                                 <i class="fa fa-undo"></i>
                             </button>
                             @endif
+                            @if(auth()->user()->isOwner())
                             @if(in_array($borrowing->status, ['pending', 'borrowed']))
                             <a href="{{ route('admin.borrowings.edit', $borrowing->id) }}" class="btn btn-sm btn-warning" title="Edit">
                                 <i class="fa fa-edit"></i>
@@ -94,6 +97,7 @@
                                     <i class="fa fa-trash"></i>
                                 </button>
                             </form>
+                            @endif
                         </td>
                     </tr>
                     @empty

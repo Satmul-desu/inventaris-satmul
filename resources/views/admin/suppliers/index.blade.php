@@ -7,9 +7,11 @@
     <div class="card-header">
         <div class="d-flex justify-content-between align-items-center">
             <h4 class="mb-0">Data Supplier</h4>
+            @if(auth()->user()->isOwner())
             <a href="{{ route('admin.suppliers.create') }}" class="btn btn-primary">
                 <i class="fa fa-plus"></i> Tambah Supplier
             </a>
+            @endif
         </div>
     </div>
     <div class="card-body">
@@ -21,7 +23,7 @@
                         <th>Nama Supplier</th>
                         <th>Telepon</th>
                         <th>Alamat</th>
-                        <th width="120">Aksi</th>
+                        <th width="{{ auth()->user()->isOwner() ? '120' : '60' }}">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -32,6 +34,10 @@
                         <td>{{ $supplier->phone ?? '-' }}</td>
                         <td>{{ Str::limit($supplier->address, 50) ?? '-' }}</td>
                         <td>
+                            <a href="{{ route('admin.suppliers.show', $supplier->id) }}" class="btn btn-sm btn-info" title="Detail">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                            @if(auth()->user()->isOwner())
                             <a href="{{ route('admin.suppliers.edit', $supplier->id) }}" class="btn btn-sm btn-warning" title="Edit">
                                 <i class="fa fa-edit"></i>
                             </a>
@@ -42,6 +48,7 @@
                                     <i class="fa fa-trash"></i>
                                 </button>
                             </form>
+                            @endif
                         </td>
                     </tr>
                     @empty

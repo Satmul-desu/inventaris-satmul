@@ -24,6 +24,7 @@ class User extends Authenticatable
         'is_active',
         'phone',
         'address',
+        'photo',
     ];
 
     /**
@@ -112,6 +113,37 @@ class User extends Authenticatable
     public function stockLogs()
     {
         return $this->hasMany(StockLog::class);
+    }
+
+    /**
+     * Get the profile photo URL.
+     */
+    public function getProfilePhotoUrlAttribute()
+    {
+        if ($this->photo) {
+            return asset('storage/' . $this->photo);
+        }
+        return null;
+    }
+
+    /**
+     * Get the default admin icon based on role.
+     */
+    public function getAdminIconAttribute()
+    {
+        if ($this->role) {
+            switch ($this->role->name) {
+                case 'owner':
+                    return 'fa-user-shield';
+                case 'admin':
+                    return 'fa-user-cog';
+                case 'staff':
+                    return 'fa-user-edit';
+                default:
+                    return 'fa-user';
+            }
+        }
+        return 'fa-user';
     }
 }
 

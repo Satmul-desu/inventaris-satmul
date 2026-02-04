@@ -12,6 +12,14 @@ use Illuminate\Support\Facades\DB;
 class BorrowingController extends Controller
 {
     /**
+     * Create a new controller instance.
+     */
+    public function __construct()
+    {
+        $this->middleware('role:owner')->only(['create', 'store', 'edit', 'update', 'destroy', 'returnItem']);
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index(Request $request)

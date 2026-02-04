@@ -7,9 +7,11 @@
     <div class="card-header">
         <div class="d-flex justify-content-between align-items-center">
             <h4 class="mb-0">Data Satuan</h4>
+            @if(auth()->user()->isOwner())
             <a href="{{ route('admin.units.create') }}" class="btn btn-primary">
                 <i class="fa fa-plus"></i> Tambah Satuan
             </a>
+            @endif
         </div>
     </div>
     <div class="card-body">
@@ -20,7 +22,7 @@
                         <th width="50">No</th>
                         <th>Nama Satuan</th>
                         <th>Jumlah Barang</th>
-                        <th width="120">Aksi</th>
+                        <th width="{{ auth()->user()->isOwner() ? '120' : '60' }}">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -30,6 +32,10 @@
                         <td><strong>{{ $unit->name }}</strong></td>
                         <td>{{ $unit->items->count() }} barang</td>
                         <td>
+                            <a href="{{ route('admin.units.show', $unit->id) }}" class="btn btn-sm btn-info" title="Detail">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                            @if(auth()->user()->isOwner())
                             <a href="{{ route('admin.units.edit', $unit->id) }}" class="btn btn-sm btn-warning" title="Edit">
                                 <i class="fa fa-edit"></i>
                             </a>
@@ -40,6 +46,7 @@
                                     <i class="fa fa-trash"></i>
                                 </button>
                             </form>
+                            @endif
                         </td>
                     </tr>
                     @empty
